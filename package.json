@@ -1,4 +1,13 @@
 {
   "name": "md-links",
-  "version": "0.1.0"
+  "version": "0.1.0",
+  "description": "Proyecto Libreria de Node, Laboratoria",
+  "main": "index.js",
+  "keywords": [
+    "javascript",
+    "Node Js",
+    "jest"
+  ],
+  "author": "Oriana Reina <oriana.nohemi22@gmail.com>",
+  "license": "MIT"
 }
