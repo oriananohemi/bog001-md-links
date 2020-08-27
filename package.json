@@ -9,5 +9,8 @@
     "jest"
   ],
   "author": "Oriana Reina <oriana.nohemi22@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "babel-cli": "^6.26.0"
+  }
 }
