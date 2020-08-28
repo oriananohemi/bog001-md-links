@@ -1,12 +1,17 @@
 const fs = require('fs');
+const marked = require('marked')
 
-module.exports = (ruta, successCallback, errorCallback) => {
+const read = (ruta, successCallback, errorCallback) => {
   fs.readFile(ruta, (err, data) => {
     if(err) {
       errorCallback(err)
     } else {
-      console.log(data.toString())
-      successCallback(data.toString())
+      const mdToHtml = marked(data.toString())
+      successCallback(mdToHtml)
     }
     })
+}
+
+module.exports = {
+  read
 }
