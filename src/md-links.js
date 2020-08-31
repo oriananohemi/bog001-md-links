@@ -1,44 +1,48 @@
-// const codeMeaning = require('./utils');
 const http = require('http');
 const https = require('https');
 const marked = require('marked');
+const utils = require('../src/utils.js');
+const handleFile = require('../src/handleFile.js');
+
 
 const statsLinks = (elementHref) => {
   const links = [];
-  if(links.length = 0) {
+  if(links.length === 0) {
     links.push(elementHref);
+    console.log(links)
   } else {
-    links.forEach(link => {
+    links.map(link => {
       if(link !== elementHref) {
-        links.push(elementHref)
+        links.push(elementHref);
+        console.log( 'eh')
       }
     })
   }
-  const linksUnique = links.length;
-  return linksUnique;
 }
 
-// const code = (number) => {
-//   const codeNumber = codeMeaning[number];
-//   return codeNumber;
-// }
-
-const validateLinks = (elementHref) => {
-  const url = new URL(elementHref);
-  const client = url.protocol === "https:" ? https : http;
-  const promise = new Promise((resolver) => {
-    client.get(url.href, (res) => {
-      resolver(res.statusCode);
-    }).on('error', (error) => {
-      console.error(error);
+const validateLink = (elementHref) => {
+  let promise;
+  if(elementHref.charAt(0) === '#') {
+    promise = new Promise((resolver, reject) => {
+      resolver('Es un enlace interno')
+    })
+  } else {
+    const url = new URL(elementHref);
+    const client = url.protocol === "https:" ? https : http;
+    promise = new Promise((resolver, reject) => {
+      client.get(url.href, (res) => {
+        resolver(res.statusCode);
+      }).on('error', (error) => {
+        reject(error);
+      });
     });
-  });
+  }
   return promise;
 }
 
-const mdLinks = async (fileMD, options, filePath) => {
+const getLinks = (data, options, filePath) => {
   const links = [];
-  const fileHTML = marked(fileMD);
+  const fileHTML = marked(data);
 
   const link = fileHTML.split('href=');
 
@@ -46,27 +50,43 @@ const mdLinks = async (fileMD, options, filePath) => {
 
   link.forEach(async element => {
     const href = element.split(element[0])[1];
-    const text1 = element.split('>')[1];
-    const text2 = text1.split('</a>')[0]
-
+    const text = element.split('>')[1].split('</a')[0];
     const linkInfo = {
-      href: href,
-      text: text2,
+      href,
+      text,
       file: filePath
     }
 
     if(options.validate) {
-      linkInfo.status = await validateLinks(href);
+      linkInfo.status = await validateLink(href);
     }
     if(options.stats) {
       statsLinks(href)
     }
     links.push(linkInfo);
-    // console.log(links)
+    console.log(links)
   });
 }
 
+const mdLinks = async (pathName, options) => {
+  const filePath = utils.buildRoute(pathName);
+  const typeFileRequired = '.md';
 
-module.exports = {
-  mdLinks
+  const handleError = (err) => {
+    console.error(`Ha ocurrido un error tratando de leer el archivo, ${err}`)
+  }
+
+  const isMD = utils.checkFileType(filePath, typeFileRequired);
+  if(isMD) {  
+    // const handleSuccess = (data, options) => {
+    //   fileOperator.mdLinks(data, options)
+    // }
+    
+    handleFile.read(filePath, (data) => getLinks(data, options, filePath), (err) => handleError(err) );
+  } else {
+    console.log(`El archivo no es de tipo ${typeFileRequired}`)
+  }
 }
+
+
+module.exports = mdLinks

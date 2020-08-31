@@ -1,35 +1,30 @@
+const fs = require('fs');
 const utils = require('./src/utils.js');
-const handleFile = require('./src/handleFile.js');
-const fileOperator = require('./src/md-links');
+const mdLinks = require('./src/md-links');
+const path = require('path');
 
-const fileNamePath = process.argv[2];
 const typeFileRequired = '.md';
 
-const handleError = (err) => {
-  console.err(`Ha ocurrido un error tratando de leer el archivo, ${err}`)
+const fileNamePath = process.argv[2];
+const flag1 = process.argv[3];
+const flag2 = process.argv[4];
+const options = {
+  validate: flag1 === '--validate' || flag2 === '--validate'  ? true : false,
+  stats: flag2 === '--stats' || flag1 === '--stats' ? true : false
 }
 
-// const handleSuccess = (data, options) => {
-//   fileOperator.mdLinks(data, options)
-// }
-
-const init = () => {
-  const isMD = utils.checkFileType(fileNamePath, typeFileRequired);
-  if(isMD) {
-    const filePath = utils.buildRoute(fileNamePath);
-
-    const flag1 = process.argv[3];
-    const flag2 = process.argv[4];
-    const options = {
-      validate: flag1 === '--validate' || flag2 === '--validate'  ? true : false,
-      stats: flag2 === '--stats' || flag1 === '--stats' ? true : false
-    }
-
-    handleFile.read(filePath, (data) => { fileOperator.mdLinks(data, options, filePath) }, (err) =>{ handleError(err) })
-
+const init = (filePath) => {
+  const isFile = utils.isFile(fileNamePath);
+  if(isFile) {
+    mdLinks(filePath, options)
   } else {
-    console.log(`El archivo no es de tipo ${typeFileRequired}`)
+    const files = fs.readdirSync(fileNamePath);
+    const mdFiles = files.filter(file => utils.checkFileType(file, typeFileRequired))
+    mdFiles.forEach(file => {
+      const dirname = path.join(filePath , file);
+      mdLinks(dirname, options)
+    })
   }
 }
 
-init()
+init(fileNamePath)

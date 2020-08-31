@@ -1,20 +1,19 @@
-const pathModule = require('path');
+const path = require('path');
 const fs = require('fs');
-const buildRoute = (path) => {
-  let absoluteRoute;
-  if(fs.Stats(path).isFile()) {
-    absoluteRoute = pathModule.resolve(path);
-    console.log('hola')
-  } else {
-    let directories = path.dirname(path)
-    console.log(directories)
-  }
+
+const isFile = (pathName) => {
+  const isFile = fs.lstatSync(pathName).isFile();
+  return isFile
+}
+
+const buildRoute = (pathName) => {
+  const absoluteRoute = path.resolve(pathName);
   return absoluteRoute;
 }
 
 const checkFileType = (pathName, extention) => {
   // const fileType = pathName.split('.').reverse()[0];
-  const fileType = pathModule.extname(pathName)
+  const fileType = path.extname(pathName)
   return fileType === extention;
 }
 
@@ -25,6 +24,7 @@ const checkFileType = (pathName, extention) => {
 // }
 
 module.exports = {
+  isFile,
   checkFileType,
   buildRoute,
   // codeMeaning,
