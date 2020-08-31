@@ -3,7 +3,7 @@ const handleFile = require('./src/handleFile.js');
 const fileOperator = require('./src/md-links');
 
 const fileNamePath = process.argv[2];
-const typeFileRequired = 'md';
+const typeFileRequired = '.md';
 
 const handleError = (err) => {
   console.err(`Ha ocurrido un error tratando de leer el archivo, ${err}`)
