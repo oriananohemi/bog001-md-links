@@ -10,6 +10,4 @@ const read = (ruta, successCallback, errorCallback) => {
     })
 }
 
-module.exports = {
-  read
-}
+module.exports = read;

@@ -14,7 +14,6 @@ const statsLinks = (elementHref) => {
     links.map(link => {
       if(link !== elementHref) {
         links.push(elementHref);
-        console.log( 'eh')
       }
     })
   }
@@ -77,14 +76,10 @@ const mdLinks = async (pathName, options) => {
   }
 
   const isMD = utils.checkFileType(filePath, typeFileRequired);
-  if(isMD) {  
-    // const handleSuccess = (data, options) => {
-    //   fileOperator.mdLinks(data, options)
-    // }
-    
+  if(isMD) {
     handleFile.read(filePath, (data) => getLinks(data, options, filePath), (err) => handleError(err) );
   } else {
-    console.log(`El archivo no es de tipo ${typeFileRequired}`)
+    console.error(`El archivo no es de tipo ${typeFileRequired}`)
   }
 }
 

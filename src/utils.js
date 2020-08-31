@@ -17,15 +17,8 @@ const checkFileType = (pathName, extention) => {
   return fileType === extention;
 }
 
-// const codeMeaning = {
-//   200: 'OK',
-//   400: 'Bad Request',
-//   404: 'Not Found'
-// }
-
 module.exports = {
   isFile,
   checkFileType,
   buildRoute,
-  // codeMeaning,
 }

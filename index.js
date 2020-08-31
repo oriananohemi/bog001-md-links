@@ -3,7 +3,7 @@ const utils = require('./src/utils.js');
 const mdLinks = require('./src/md-links');
 const path = require('path');
 
-const typeFileRequired = '.md';
+const TYPE_FILE_REQUIRED = '.md';
 
 const fileNamePath = process.argv[2];
 const flag1 = process.argv[3];
@@ -19,7 +19,7 @@ const init = (filePath) => {
     mdLinks(filePath, options)
   } else {
     const files = fs.readdirSync(fileNamePath);
-    const mdFiles = files.filter(file => utils.checkFileType(file, typeFileRequired))
+    const mdFiles = files.filter(file => utils.checkFileType(file, TYPE_FILE_REQUIRED))
     mdFiles.forEach(file => {
       const dirname = path.join(filePath , file);
       mdLinks(dirname, options)
