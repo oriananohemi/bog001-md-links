@@ -2,21 +2,15 @@ const http = require('http');
 const https = require('https');
 const marked = require('marked');
 const utils = require('../src/utils.js');
-const handleFile = require('../src/handleFile.js');
+const read = require('../src/handleFile.js');
 
-
-const statsLinks = (elementHref) => {
-  const links = [];
-  if(links.length === 0) {
-    links.push(elementHref);
-    console.log(links)
-  } else {
-    links.map(link => {
-      if(link !== elementHref) {
-        links.push(elementHref);
-      }
-    })
+const statsLinks = (count, links) => {
+  const linksUniqueArray = [...new Set(links.map(link => link.href))].length
+  const stats = {
+    total: count,
+    unique: linksUniqueArray
   }
+  return stats
 }
 
 const validateLink = (elementHref) => {
@@ -39,14 +33,14 @@ const validateLink = (elementHref) => {
   return promise;
 }
 
-const getLinks = (data, options, filePath) => {
+const getLinks = async (data, options, filePath) => {
   const links = [];
   const fileHTML = marked(data);
-
+  
   const link = fileHTML.split('href=');
-
+  
   link.shift()
-
+  
   link.forEach(async element => {
     const href = element.split(element[0])[1];
     const text = element.split('>')[1].split('</a')[0];
@@ -57,31 +51,61 @@ const getLinks = (data, options, filePath) => {
     }
 
     if(options.validate) {
-      linkInfo.status = await validateLink(href);
-    }
-    if(options.stats) {
-      statsLinks(href)
+      try {
+        linkInfo.status = await validateLink(href);
+      } catch(error) {
+        console.error(error)
+      }
     }
     links.push(linkInfo);
-    console.log(links)
+
+    if(options.stats) {
+      const count = link.length
+      console.log( statsLinks(count, links))
+    }
   });
+  // if(options.stats && options.validate) {
+  //   statsLinks(count, links);
+  //   let broke = 0;
+  //   // links.forEach(link => {
+  //   //    if(validateLink(link.href) > 400) {
+  //   //      broke++
+  //   //      console.log(link.href)
+  //   //    }
+  //   // })
+  // }
+  return links;
 }
 
-const mdLinks = async (pathName, options) => {
+const defaultOptions = {
+  validate: false,
+  stats: false
+}
+
+const mdLinks = async (pathName, options = defaultOptions) => {
   const filePath = utils.buildRoute(pathName);
   const typeFileRequired = '.md';
 
   const handleError = (err) => {
     console.error(`Ha ocurrido un error tratando de leer el archivo, ${err}`)
   }
-
+  let promise;
   const isMD = utils.checkFileType(filePath, typeFileRequired);
   if(isMD) {
-    handleFile.read(filePath, (data) => getLinks(data, options, filePath), (err) => handleError(err) );
+    promise = new Promise((resolve) => {
+      const successCallback = (data) => {
+        const linksArray = getLinks(data, options, filePath)
+        resolve(linksArray);
+      }
+      read(filePath, successCallback, handleError );
+      });
   } else {
-    console.error(`El archivo no es de tipo ${typeFileRequired}`)
+    promise = new Promise((resolve, reject) => {
+      reject(error);
+    });
   }
+
+  return promise;
 }
 
-
-module.exports = mdLinks
+module.exports = mdLinks;

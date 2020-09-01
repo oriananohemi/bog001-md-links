@@ -16,13 +16,17 @@ const options = {
 const init = (filePath) => {
   const isFile = utils.isFile(fileNamePath);
   if(isFile) {
-    mdLinks(filePath, options)
+    mdLinks(filePath, options).then((links) => {
+      console.log(links)
+    }).catch(console.error)
   } else {
     const files = fs.readdirSync(fileNamePath);
     const mdFiles = files.filter(file => utils.checkFileType(file, TYPE_FILE_REQUIRED))
     mdFiles.forEach(file => {
       const dirname = path.join(filePath , file);
-      mdLinks(dirname, options)
+      mdLinks(dirname, options).then((links) => {
+        console.log(links)
+      }).catch(console.error)
     })
   }
 }
