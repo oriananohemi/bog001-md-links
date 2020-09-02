@@ -4,27 +4,36 @@ const marked = require('marked');
 const utils = require('../src/utils.js');
 const read = require('../src/handleFile.js');
 
-const statsLinks = (count, links) => {
-  const linksUniqueArray = [...new Set(links.map(link => link.href))].length
-  const stats = {
-    total: count,
-    unique: linksUniqueArray
-  }
+const statsLinks = (links, validate = false) => {
+    const count = links.length;
+    const linksUniqueArray = [...new Set(links.map(link => link.href))]
+    const stats = {
+      total: count,
+      unique: linksUniqueArray.length
+    }
+
+    if(validate) {
+      stats.broken = linksUniqueArray.reduce((accumulator, currentElement) => {
+        accumulator += currentElement.status > 400 ? 1 : 0;
+        return accumulator;
+      }, 0)
+    }
   return stats
+  ;
 }
 
 const validateLink = (elementHref) => {
   let promise;
   if(elementHref.charAt(0) === '#') {
-    promise = new Promise((resolver, reject) => {
+    promise = new Promise((resolver) => {
       resolver('Es un enlace interno')
     })
   } else {
     const url = new URL(elementHref);
     const client = url.protocol === "https:" ? https : http;
-    promise = new Promise((resolver, reject) => {
+    promise = new Promise((resolve, reject) => {
       client.get(url.href, (res) => {
-        resolver(res.statusCode);
+        resolve(res.statusCode);
       }).on('error', (error) => {
         reject(error);
       });
@@ -33,48 +42,47 @@ const validateLink = (elementHref) => {
   return promise;
 }
 
-const getLinks = async (data, options, filePath) => {
-  const links = [];
-  const fileHTML = marked(data);
-  
-  const link = fileHTML.split('href=');
-  
-  link.shift()
-  
-  link.forEach(async element => {
-    const href = element.split(element[0])[1];
-    const text = element.split('>')[1].split('</a')[0];
-    const linkInfo = {
-      href,
-      text,
-      file: filePath
-    }
+const getLinks = (data, options, filePath) => {
+  const promise = new Promise((resolve) => {
+    const fileHTML = marked(data);
+
+    const linksArray = fileHTML.split('href=');
+
+    linksArray.shift();
+
+    const links = linksArray.map(element => {
+      const href = element.split(element[0])[1];
+      const text = element.split('>')[1].split('</a')[0];
+      const linkInfo = {
+        href,
+        text,
+        file: filePath,
+      }
+      return linkInfo
+    })
 
     if(options.validate) {
-      try {
-        linkInfo.status = await validateLink(href);
-      } catch(error) {
-        console.error(error)
-      }
+      const linksPromise = links.map((link) => {
+        return validateLink(link.href);
+      })
+      Promise.allSettled(linksPromise)
+      .then((result) => {
+        result.forEach((res) => {
+          links.status = res.value;
+        })
+      })
+      .catch(console.error)
     }
-    links.push(linkInfo);
 
     if(options.stats) {
-      const count = link.length
-      console.log( statsLinks(count, links))
+      const stats = statsLinks(links, options.validate)
+      resolve(stats);
+      return;
     }
-  });
-  // if(options.stats && options.validate) {
-  //   statsLinks(count, links);
-  //   let broke = 0;
-  //   // links.forEach(link => {
-  //   //    if(validateLink(link.href) > 400) {
-  //   //      broke++
-  //   //      console.log(link.href)
-  //   //    }
-  //   // })
-  // }
-  return links;
+
+    resolve(links);
+  })
+  return promise;
 }
 
 const defaultOptions = {
@@ -82,29 +90,27 @@ const defaultOptions = {
   stats: false
 }
 
-const mdLinks = async (pathName, options = defaultOptions) => {
+const mdLinks = (pathName, options = defaultOptions) => {
   const filePath = utils.buildRoute(pathName);
   const typeFileRequired = '.md';
 
-  const handleError = (err) => {
-    console.error(`Ha ocurrido un error tratando de leer el archivo, ${err}`)
-  }
-  let promise;
   const isMD = utils.checkFileType(filePath, typeFileRequired);
-  if(isMD) {
-    promise = new Promise((resolve) => {
-      const successCallback = (data) => {
-        const linksArray = getLinks(data, options, filePath)
-        resolve(linksArray);
+  const promise = new Promise((resolve, reject) => {
+    if(isMD) {
+      const handleError = (err) => {
+        reject(`Ha ocurrido un error tratando de leer el archivo, ${err}`)
       }
-      read(filePath, successCallback, handleError );
-      });
-  } else {
-    promise = new Promise((resolve, reject) => {
-      reject(error);
-    });
-  }
 
+      const successCallback = (data) => {
+        getLinks(data, options, filePath)
+          .then(linksArray => resolve(linksArray))
+          .catch((error) => reject(`Ha ocurrido un error al leer los enlaces del archivo ${error}`))
+      }
+      read(filePath, successCallback, handleError);
+    } else {
+      reject(`El archivo no es del tipo ${typeFileRequired}`);
+    }
+  });
   return promise;
 }
 
