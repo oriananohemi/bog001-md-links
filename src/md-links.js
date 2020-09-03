@@ -35,7 +35,7 @@ const validateLink = (elementHref) => {
       client.get(url.href, (res) => {
         resolve(res.statusCode);
       }).on('error', (error) => {
-        reject(error);
+        reject(error.code);
       });
     });
   }
@@ -65,13 +65,21 @@ const getLinks = (data, options, filePath) => {
       const linksPromise = links.map((link) => {
         return validateLink(link.href);
       })
+
       Promise.allSettled(linksPromise)
       .then((result) => {
-        result.forEach((res) => {
-          links.status = res.value;
+        result.forEach((res, index) => {
+          console.log(res)
+          links[index].status = res.value || res.reason;
         })
+        if(options.stats) {
+          const stats = statsLinks(links, options.validate)
+          resolve(stats);
+          return;
+        }
+        resolve(links)
       })
-      .catch(console.error)
+      return;
     }
 
     if(options.stats) {
