@@ -8,10 +8,14 @@
     "Node Js",
     "jest"
   ],
+  "scripts": {
+    "pretest": "npm run htmlhint && npm run eslint && npm run stylelint",
+    "test": "jest --coverage"
+  },
   "author": "Oriana Reina <oriana.nohemi22@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "babel-cli": "^6.26.0"
+    "jest": "^24.8.0"
   },
   "dependencies": {
     "marked": "^1.1.1"
