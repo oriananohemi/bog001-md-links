@@ -1,6 +1,6 @@
 {
-  "name": "oriananohemimd-links",
-  "version": "0.1.0",
+  "name": "@oriananohemi/md-links",
+  "version": "1.0.0",
   "description": "Proyecto Libreria de Node, Laboratoria",
   "main": "index.js",
   "keywords": [

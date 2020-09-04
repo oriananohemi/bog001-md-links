@@ -1,6 +1,6 @@
 const fs = require('fs');
 const utils = require('./src/utils.js');
-const mdLinks = require('./src/md-links');
+const { mdLinks } = require('./src/md-links');
 const path = require('path');
 
 const TYPE_FILE_REQUIRED = '.md';

@@ -14,7 +14,7 @@ const statsLinks = (links, validate = false) => {
 
     if(validate) {
       stats.broken = linksUniqueArray.reduce((accumulator, currentElement) => {
-        accumulator += currentElement.status > 400 || typeof currentElement.status === 'string' ? 1 : 0;
+        accumulator += currentElement.status > 400 ? 1 : 0;
         return accumulator;
       }, 0)
     }
@@ -70,6 +70,7 @@ const getLinks = (data, options, filePath) => {
       .then((result) => {
         result.forEach((res, index) => {
           links[index].status = res.value || res.reason;
+          links[index].value = res.value < 400 ? 'OK' : 'Fail'
         })
         if(options.stats) {
           const stats = statsLinks(links, options.validate)
