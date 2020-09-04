@@ -1,4 +1,4 @@
-# Markdown Links
+# Markdown Links 💻
 
 ## Índice
 
@@ -36,6 +36,8 @@ algunas estadísticas.
 
 ## 2. Instrucciones
 
+### Diagrama de Flujo
+<img src="./Screenshot from 2020-09-03 21-39-56.png">
 
 ## 3. Resumen del proyecto
 

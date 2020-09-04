@@ -8,6 +8,9 @@
     "Node Js",
     "jest"
   ],
+  "repository": {
+    "url": "https://github.com/oriananohemi/bog001-md-links"
+  },
   "scripts": {
     "pretest": "npm run htmlhint && npm run eslint && npm run stylelint",
     "test": "jest --coverage"
