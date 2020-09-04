@@ -1,35 +1,37 @@
-const statsLinks = require ('../src/md-links');
-const validateLink = require('../src/md-links');
-const getLinks = require('../src/md-links');
-const mdLinks = require('../src/md-links');
+const mdLinks = require ('../src/md-links');
 
 describe('statsLinks', () => {
-
   it('Debe ser una funcion', () => {
-    expect(typeof statsLinks).toBe('function');
+    expect(typeof mdLinks.statsLinks).toBe('function');
   });
+  it('Si se recibe el parametro validate vamos a retornar un objeto con las key (total, unique)', () => {
+    expect(mdLinks.statsLinks()).toEqual('{}');
+  });
+  // it('Debe ser una funcion', () => {
+  //   expect(typeof validateLink).toBe('function');
+  // });
 
 });
 
-describe('validateLink', () => {
+// describe('validateLink', () => {
 
-  it('Debe ser una funcion', () => {
-    expect(typeof validateLink).toBe('function');
-  });
+//   it('Debe ser una funcion', () => {
+//     expect(typeof validateLink).toBe('function');
+//   });
 
-});
+// });
 
-describe('getLinks', () => {
+// describe('getLinks', () => {
 
-  it('Debe ser una funcion', () => {
-    expect(typeof getLinks).toBe('function');
-  });
-});
+//   it('Debe ser una funcion', () => {
+//     expect(typeof getLinks).toBe('function');
+//   });
+// });
 
-describe('mdLinks', () => {
+// describe('mdLinks', () => {
 
-  it('Debe ser una funcion', () => {
-    expect(typeof mdLinks).toBe('function');
-  });
+//   it('Debe ser una funcion', () => {
+//     expect(typeof mdLinks).toBe('function');
+//   });
 
-});
+// });

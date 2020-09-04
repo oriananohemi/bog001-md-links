@@ -14,7 +14,7 @@ const statsLinks = (links, validate = false) => {
 
     if(validate) {
       stats.broken = linksUniqueArray.reduce((accumulator, currentElement) => {
-        accumulator += currentElement.status > 400 ? 1 : 0;
+        accumulator += currentElement.status > 400 || typeof currentElement.status === 'string' ? 1 : 0;
         return accumulator;
       }, 0)
     }
@@ -69,7 +69,6 @@ const getLinks = (data, options, filePath) => {
       Promise.allSettled(linksPromise)
       .then((result) => {
         result.forEach((res, index) => {
-          console.log(res)
           links[index].status = res.value || res.reason;
         })
         if(options.stats) {
@@ -122,4 +121,9 @@ const mdLinks = (pathName, options = defaultOptions) => {
   return promise;
 }
 
-module.exports = mdLinks;
+module.exports = {
+  mdLinks,
+  statsLinks,
+  validateLink,
+  getLinks
+}
