@@ -1,6 +1,6 @@
 {
   "name": "@oriananohemi/md-links",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Proyecto Libreria de Node, Laboratoria",
   "main": "index.js",
   "keywords": [
@@ -9,7 +9,7 @@
     "jest"
   ],
   "repository": {
-    "url": "https://github.com/oriananohemi/bog001-md-links"
+    "url": "git://github.com/oriananohemi/bog001-md-links"
   },
   "scripts": {
     "pretest": "npm run htmlhint && npm run eslint && npm run stylelint",
@@ -17,7 +17,12 @@
   },
   "author": "Oriana Reina <oriana.nohemi22@gmail.com>",
   "license": "MIT",
+  "bin": {
+    "md-links": "./bin/global.js"
+  },
+  "preferGlobal": true,
   "devDependencies": {
+    "eslint": "^7.7.0",
     "jest": "^24.8.0"
   },
   "dependencies": {
