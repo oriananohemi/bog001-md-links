@@ -1,7 +1,7 @@
 const utils = require ('../src/utils');
 
 describe('isFile', () => {
-  const directories = 'src';
+  const directories = `${__dirname}/mock`;
   it('Debe ser una funcion', () => {
     expect(typeof utils.isFile).toBe('function');
   });
@@ -11,8 +11,8 @@ describe('isFile', () => {
 })
 
 describe('buildRoute', () => {
-  const directories = 'README.md';
-  const pathAbsolute = '/home/linix/Documents/Oriana/bog001-md-links/README.md'
+  const directories = 'dataLoverPrueba.md';
+  const pathAbsolute = '/home/linix/Documents/Oriana/bog001-md-links/dataLoverPrueba.md';
   it('Debe ser una funcion', () => {
     expect(typeof utils.buildRoute).toBe('function');
   });
@@ -22,7 +22,7 @@ describe('buildRoute', () => {
 })
 
 describe('checkFileType', () => {
-  const directories = '/home/linix/Documents/Oriana/bog001-md-links/README.md';
+  const directories = `${__dirname}/mock/folderMock/dataLoverPrueba.md`;
   const extension = '.md'
   it('Debe ser una funcion', () => {
     expect(typeof utils.checkFileType).toBe('function');
