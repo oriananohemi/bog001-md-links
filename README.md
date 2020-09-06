@@ -8,8 +8,10 @@ Libreria que permite extraer todos los enlaces dentro de un archivo de tipo Mark
       $ npm install -g @oriananohemi/md-links
   </kbd>
 
-## USO CLI
+## Uso CLI
   Recibe como argumento un archivo ".md" o una carpeta que contenga un archivo ".md".
+
+  **Al ejecutar el comando, te imprime un arreglo de objetos con las url, la referencia dada al enlace, el archivo donde se encontro el enlace**
 
   <kbd>
     $ mdlinks README.md
@@ -84,3 +86,44 @@ Libreria que permite extraer todos los enlaces dentro de un archivo de tipo Mark
   Unique: 3,
   Broken: 1
  ```
+
+## Instalar como Modulo
+
+  <kbd>
+      $ npm install @oriananohemi/md-links
+  </kbd>
+
+## Uso del Modulo
+
+  <kbd>
+      const mdlinks = require('@oriananohemi/md-links)
+  </kbd>
+
+  **Devuelve un arreglo de objetos con las url, la referencia dada al enlace, el archivo donde se encontro el enlace**
+```
+mdlinks('./README.md')
+  .then((res) => {
+    console.log(res);
+  })
+```
+  **Devuelve un arreglo de objetos con las url, la referencia dada al enlace, el archivo donde se encontro el enlace y verifica cada uno de los links, imprimiendo tambien el codigo de la respuesta**
+```
+mdlinks('./README.md', { validate: true})
+  .then((res) => {
+    console.log(res);
+  })
+```
+  **Devuelve las estadisticas de los enlaces encontrados en el archivo, cuantos hay en total y cuantos son unicos**
+```
+mdlinks('./README.md', { stats: true})
+  .then((res) => {
+    console.log(res);
+  })
+```
+  **Devuelve las estadisticas de los enlaces encontrados en el archivo, cuantos hay en total, cuantos son unicos y cuales estan rotos**
+```
+mdlinks('./README.md', { validate: true, stats: true})
+  .then((res) => {
+    console.log(res);
+  })
+```
