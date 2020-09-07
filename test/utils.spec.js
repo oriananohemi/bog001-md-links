@@ -1,34 +1,71 @@
 const utils = require ('../src/utils');
+const fs = require('fs');
+const path = require('path');
 
 describe('isFile', () => {
-  const directories = `${__dirname}/mock`;
+
   it('Debe ser una funcion', () => {
     expect(typeof utils.isFile).toBe('function');
   });
-  it('Debe retornarme false si recibe un directorio', () => {
-    expect( utils.isFile(directories) ).toBe(false);
+
+  it('Debe retornar false si fs.lstatSync.isFile retorna false', () => {
+    jest.spyOn(fs, 'lstatSync').mockImplementationOnce(() => {
+      return {
+        isFile: () => {
+          return false;
+        }
+      }
+    })
+
+    const result = utils.isFile('string');
+
+    expect(result).toBe(false);
   })
+
+  it('Debe llamar a la funcion fs.lstatSync', () => {
+    jest.spyOn(fs, 'lstatSync').mockImplementationOnce(() => {
+      return {
+        isFile: () => {
+          return false;
+        }
+      }
+    })
+
+    utils.isFile('string');
+
+    expect(fs.lstatSync).toHaveBeenCalledWith('string')
+  })
+
 })
 
 describe('buildRoute', () => {
-  const directories = 'dataLoverPrueba.md';
-  const pathAbsolute = '/home/linix/Documents/Oriana/bog001-md-links/dataLoverPrueba.md';
   it('Debe ser una funcion', () => {
     expect(typeof utils.buildRoute).toBe('function');
   });
+
   it('Debe retornar una ruta absoluta', () => {
-    expect( utils.buildRoute(directories)).toEqual(pathAbsolute);
+    jest.spyOn(path, 'resolve').mockImplementationOnce((file) => {
+      return `home/prueba/miproyecto/${file}`;
+    })
+
+    const nameTest = 'string-prueba';
+    const pathAbsolute = 'home/prueba/miproyecto/string-prueba';
+
+    expect(utils.buildRoute(nameTest)).toEqual(pathAbsolute);
   })
 })
 
 describe('checkFileType', () => {
-  const directories = `${__dirname}/mock/folderMock/dataLoverPrueba.md`;
-  const extension = '.md'
   it('Debe ser una funcion', () => {
     expect(typeof utils.checkFileType).toBe('function');
   });
-  it('Debe retornar true si recibe un archivo con la extension requerida por el proyecto', () => {
-    expect( utils.checkFileType(directories, extension)).toBe(true);
 
+  it('Debe retornar true si recibe un archivo con la extension requerida por el proyecto', () => {
+    jest.spyOn(path, 'extname').mockImplementationOnce(() => {
+      return '.md';
+    })
+    const nameTest = 'string-prueba';
+    const extension = '.md'
+    expect( utils.checkFileType(nameTest, extension)).toBe(true);
   })
 })
