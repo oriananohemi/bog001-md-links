@@ -18,8 +18,8 @@ const init = (filePath) => {
     const isFile = utils.isFile(filePath);
     if(isFile) {
       mdLinks(filePath, options).then((links) => {
-        if(links === []) {
-          console.log('El archivo no contiende enlaces')
+        if(links.length === 0) {
+          console.log('El archivo no contiene enlaces')
         } else {
           console.log(links)
         }
@@ -30,8 +30,9 @@ const init = (filePath) => {
       mdFiles.forEach(file => {
         const dirname = path.join(filePath , file);
         mdLinks(dirname, options).then((links) => {
-          if(links === []) {
-            console.log('El archivo no contiende enlaces')
+          console.log(links)
+          if(links.length === 0) {
+            console.log('El archivo no contiene enlaces')
           } else {
             console.log(links)
           }
@@ -39,8 +40,10 @@ const init = (filePath) => {
       })
     }
   } else {
-    console.error('El archivo no existe')
+    console.error('Revise la ruta ingresada, el archivo no ha sido encontrado')
   }
 }
 
 init(fileNamePath)
+
+module.exports = init;
