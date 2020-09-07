@@ -14,20 +14,32 @@ const options = {
 }
 
 const init = (filePath) => {
-  const isFile = utils.isFile(fileNamePath);
-  if(isFile) {
-    mdLinks(filePath, options).then((links) => {
-      console.log(links)
-    }).catch(console.error)
-  } else {
-    const files = fs.readdirSync(fileNamePath);
-    const mdFiles = files.filter(file => utils.checkFileType(file, TYPE_FILE_REQUIRED))
-    mdFiles.forEach(file => {
-      const dirname = path.join(filePath , file);
-      mdLinks(dirname, options).then((links) => {
-        console.log(links)
+  if(utils.fileExists(filePath)) {
+    const isFile = utils.isFile(filePath);
+    if(isFile) {
+      mdLinks(filePath, options).then((links) => {
+        if(links === []) {
+          console.log('El archivo no contiende enlaces')
+        } else {
+          console.log(links)
+        }
       }).catch(console.error)
-    })
+    } else {
+      const files = fs.readdirSync(fileNamePath);
+      const mdFiles = files.filter(file => utils.checkFileType(file, TYPE_FILE_REQUIRED))
+      mdFiles.forEach(file => {
+        const dirname = path.join(filePath , file);
+        mdLinks(dirname, options).then((links) => {
+          if(links === []) {
+            console.log('El archivo no contiende enlaces')
+          } else {
+            console.log(links)
+          }
+        }).catch(console.error)
+      })
+    }
+  } else {
+    console.error('El archivo no existe')
   }
 }
 

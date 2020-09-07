@@ -1,6 +1,17 @@
 const path = require('path');
 const fs = require('fs');
 
+const fileExists = (pathName) => {
+  try {
+    fs.statSync(pathName);
+    return true;
+  } catch(err) {
+    if (err.code === 'ENOENT') {
+      return false;
+    }
+  }
+}
+
 const isFile = (pathName) => {
   const isFile = fs.lstatSync(pathName).isFile();
   return isFile;
@@ -18,6 +29,7 @@ const checkFileType = (pathName, extention) => {
 }
 
 module.exports = {
+  fileExists,
   isFile,
   checkFileType,
   buildRoute,
