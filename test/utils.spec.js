@@ -21,6 +21,19 @@ describe('fileExists', () => {
 
     expect(result).toBe(true);
   })
+  it('Debe retornar false si fs.statSync retorna false', () => {
+    jest.spyOn(fs, 'statSync').mockImplementationOnce(() => {
+      return {
+        fileExits: () => {
+          return false;
+        }
+      }
+    })
+
+    const result = utils.fileExists('prueba.md');
+
+    expect(result).toBe(true);
+  })
 })
 
 describe('isFile', () => {

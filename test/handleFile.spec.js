@@ -1,18 +1,28 @@
 const read = require('../src/handleFile');
+const fs = require('fs');
 
 describe('read', () => {
-  const pathAbsolute = '/home/linix/Documents/Oriana/bog001-md-links/dataLover.md';
-  const handleError = (err) => {
-    console.error(err);
-  }
-  const successCallback = () => {
-    console.log('entro');
-  }
   it('Debe ser una funcion', () => {
     expect(typeof read).toBe('function');
   });
-  it('Debe ejecutar un errorCallback si no puede leer el archivo', () => {
-    expect(read(pathAbsolute, handleError, successCallback)).toEqual(handleError());
-  });
-})
 
+  it('Debe ejecutar el errorCallback si no puede leer el archivo', () => {
+    const error = 'Mensaje de error';
+    const handleError = jest.fn();
+    jest.spyOn(fs, 'readFile').mockImplementationOnce((path, cb) => cb(error));
+
+    read('prueba.md', () => {}, handleError);
+
+    expect(handleError).toHaveBeenCalledWith(error);
+
+  });
+  it('Debe ejecutar el successCallback si la lectura del archivo es exitosa', () => {
+    const success = 'Success';
+    const successCallback = jest.fn();
+    jest.spyOn(fs, 'readFile').mockImplementationOnce((path, cb) => cb(null, Buffer.from(success)));
+
+    read('prueba.md',successCallback, () => {});
+
+    expect(successCallback).toHaveBeenCalledWith(success);
+  });
+});

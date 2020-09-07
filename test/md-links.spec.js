@@ -3,15 +3,18 @@ const {mockMdLinks, mockMdLinksValidate, mockStats, mockStatsValidate, mockHref,
 const prueba = `${__dirname}/mock/folderMock/prueba.md`;
 
 describe('statsLinks', () => {
+
   it('Debe ser una funcion', () => {
     expect(typeof mdLinks.statsLinks).toBe('function');
   });
+
   it('Si se recibe el parametro stats vamos a retornar un objeto con las key (total, unique)', () => {
     expect(mdLinks.statsLinks(mockMdLinks)).toEqual(mockStats);
   });
 });
 
-describe('stats como parametro de mdlinks', () => {
+describe('mdLinks', () => {
+
   it('Si se recibe el parametro stats vamos a retornar un objeto con las key (total, unique)', () => {
     expect(mdLinks.mdLinks(prueba, {stats: true})).resolves.toEqual(mockStats);
   });
