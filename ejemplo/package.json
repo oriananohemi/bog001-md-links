@@ -1,0 +1,15 @@
+{
+  "name": "ejemplo-mdlinks",
+  "version": "1.0.0",
+  "description": "Ejemplo de implementacion de la libreria en un frontend",
+  "main": "script.js",
+  "scripts": {
+    "pretest": "npm run htmlhint && npm run eslint && npm run stylelint",
+    "test": "jest --coverage"
+  },
+  "author": "Oriana Reina <oriana.nohemi22@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@oriananohemi/md-links": "^1.2.0"
+  }
+}
