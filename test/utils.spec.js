@@ -2,6 +2,27 @@ const utils = require ('../src/utils');
 const fs = require('fs');
 const path = require('path');
 
+describe('fileExists', () => {
+
+  it('Debe ser una funcion', () => {
+    expect(typeof utils.fileExists).toBe('function');
+  });
+
+  it('Debe retornar true si fs.statSync retorna true', () => {
+    jest.spyOn(fs, 'statSync').mockImplementationOnce(() => {
+      return {
+        fileExits: () => {
+          return true;
+        }
+      }
+    })
+
+    const result = utils.fileExists('readme.md');
+
+    expect(result).toBe(true);
+  })
+})
+
 describe('isFile', () => {
 
   it('Debe ser una funcion', () => {
