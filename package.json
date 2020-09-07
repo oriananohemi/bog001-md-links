@@ -12,7 +12,7 @@
     "type": "git",
     "url": "git+http://github.com/oriananohemi/bog001-md-links"
   },
-  "homepage": "https://gihub.com/oriananohemi/bog001-md-links#laboratoria",
+  "homepage": "https://gihub.com/oriananohemi/bog001-md-links#laboratoria.md",
   "scripts": {
     "htmlhint": "htmlhint src/*.html test/*.html",
     "eslint": "eslint --ext .js src/ test/",
