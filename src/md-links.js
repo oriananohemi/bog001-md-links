@@ -2,7 +2,7 @@ const http = require('http');
 const https = require('https');
 const marked = require('marked');
 const utils = require('../src/utils.js');
-const read = require('../src/handleFile.js');
+const handleFile = require('../src/handleFile.js');
 
 const statsLinks = (links, validate = false) => {
     const count = links.length;
@@ -14,7 +14,7 @@ const statsLinks = (links, validate = false) => {
 
     if(validate) {
       stats.broken = linksUniqueArray.reduce((accumulator, currentElement) => {
-      accumulator += currentElement.status > 399 || currentElement.status === 'ENOENT' ? 1 : 0;
+      accumulator += currentElement.status > 399 ? 1 : 0;
         return accumulator;
       }, 0)
     }
@@ -45,7 +45,6 @@ const validateLink = (elementHref) => {
 const getLinks = (data, options, filePath) => {
   const promise = new Promise((resolve) => {
     const fileHTML = marked(data);
-
     const linksArray = fileHTML.split('href=');
 
     linksArray.shift();
@@ -114,7 +113,7 @@ const mdLinks = (pathName, options = defaultOptions) => {
           .then(linksArray => resolve(linksArray))
           .catch((error) => reject(`Ha ocurrido un error al leer los enlaces del archivo ${error}`))
       }
-      read(filePath, successCallback, handleError);
+      handleFile.read(filePath, successCallback, handleError);
     } else {
       reject(`El archivo no es del tipo ${typeFileRequired}`);
     }
