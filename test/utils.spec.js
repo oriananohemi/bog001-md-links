@@ -85,7 +85,9 @@ describe('buildRoute', () => {
     const nameTest = 'string-prueba';
     const pathAbsolute = 'home/prueba/miproyecto/string-prueba';
 
-    expect(utils.buildRoute(nameTest)).toEqual(pathAbsolute);
+    const result = utils.buildRoute(nameTest)
+
+    expect(result).toEqual(pathAbsolute);
   })
 })
 
@@ -100,6 +102,8 @@ describe('checkFileType', () => {
     })
     const nameTest = 'string-prueba';
     const extension = '.md'
-    expect( utils.checkFileType(nameTest, extension)).toBe(true);
+    const result = utils.checkFileType(nameTest, extension);
+
+    expect( result).toBe(true);
   })
 })

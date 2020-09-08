@@ -1,9 +1,9 @@
-const read = require('../src/handleFile');
+const handleFile = require('../src/handleFile');
 const fs = require('fs');
 
 describe('read', () => {
   it('Debe ser una funcion', () => {
-    expect(typeof read).toBe('function');
+    expect(typeof handleFile.read).toBe('function');
   });
 
   it('Debe ejecutar el errorCallback si no puede leer el archivo', () => {
@@ -11,7 +11,7 @@ describe('read', () => {
     const handleError = jest.fn();
     jest.spyOn(fs, 'readFile').mockImplementationOnce((path, cb) => cb(error));
 
-    read('prueba.md', () => {}, handleError);
+    handleFile.read('prueba.md', () => {}, handleError);
 
     expect(handleError).toHaveBeenCalledWith(error);
 
@@ -21,7 +21,7 @@ describe('read', () => {
     const successCallback = jest.fn();
     jest.spyOn(fs, 'readFile').mockImplementationOnce((path, cb) => cb(null, Buffer.from(success)));
 
-    read('prueba.md',successCallback, () => {});
+    handleFile.read('prueba.md',successCallback, () => {});
 
     expect(successCallback).toHaveBeenCalledWith(success);
   });
