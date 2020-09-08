@@ -1,6 +1,6 @@
 {
   "name": "@oriananohemi/md-links",
-  "version": "1.3.0",
+  "version": "1.5.0",
   "description": "Proyecto Libreria de Node, Laboratoria",
   "main": "index.js",
   "keywords": [
@@ -9,8 +9,7 @@
     "jest"
   ],
   "repository": {
-    "type": "git",
-    "url": "git+http://github.com/oriananohemi/bog001-md-links"
+    "url": "git://github.com/oriananohemi/md-links"
   },
   "homepage": "https://gihub.com/oriananohemi/bog001-md-links#laboratoria.md",
   "scripts": {
@@ -24,6 +23,9 @@
   "license": "MIT",
   "bin": {
     "mdlinks": "./bin/global.js"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
   },
   "preferGlobal": true,
   "devDependencies": {
