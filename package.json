@@ -24,6 +24,7 @@
   "bin": {
     "mdlinks": "./bin/global.js"
   },
+  "publishConfig": { "registry": "https://npm.pkg.github.com/" },
   "preferGlobal": true,
   "devDependencies": {
     "htmlhint": "^0.11.0",
