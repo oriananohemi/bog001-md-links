@@ -1,8 +1,8 @@
 {
   "name": "@oriananohemi/md-links",
-  "version": "1.5.0",
+  "version": "1.7.0",
   "description": "Proyecto Libreria de Node, Laboratoria",
-  "main": "index.js",
+  "main": "./src",
   "keywords": [
     "javascript",
     "Node Js",
@@ -23,9 +23,6 @@
   "license": "MIT",
   "bin": {
     "mdlinks": "./bin/global.js"
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
   },
   "preferGlobal": true,
   "devDependencies": {
