@@ -1,6 +1,6 @@
 {
   "name": "@oriananohemi/md-links",
-  "version": "1.9.5",
+  "version": "1.9.6",
   "description": "Proyecto Libreria de Node, Laboratoria",
   "main": "./src/index.js",
   "keywords": [
