@@ -89,6 +89,13 @@ Libreria que permite extraer todos los enlaces dentro de un archivo de tipo Mark
 
 ## Instalar como Modulo
 
+
+Github Packages
+  <kbd>
+      $ npm install oriananohemi/md-links
+  </kbd>
+
+NPM
   <kbd>
       $ npm install @oriananohemi/md-links
   </kbd>

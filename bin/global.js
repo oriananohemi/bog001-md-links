@@ -1,3 +1,3 @@
 #!/usr/bin/env node
 
-const mdlinks = require('../index.js');
+const mdlinks = require('../src');
