@@ -5,7 +5,7 @@ Libreria que permite extraer todos los enlaces dentro de un archivo de tipo Mark
 ## Instalar CLI
 
   <kbd>
-      $ npm install -g @oriananohemi/md-links
+      $ npm install -g oriananohemi/md-links
   </kbd>
 
 ## Uso CLI
@@ -95,15 +95,10 @@ Github Packages
       $ npm install oriananohemi/md-links
   </kbd>
 
-NPM
-  <kbd>
-      $ npm install @oriananohemi/md-links
-  </kbd>
-
 ## Uso del Modulo
 
   <kbd>
-      const mdlinks = require('md-links')
+      const mdlinks = require('@oriananohemi/md-links')
   </kbd>
 
   **Devuelve un arreglo de objetos con las url, la referencia dada al enlace, el archivo donde se encontro el enlace**

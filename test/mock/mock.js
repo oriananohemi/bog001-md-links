@@ -105,9 +105,15 @@ const mockMdLinksValidateError = [
 
 const mockMdLinksStatsError = {
   total: 3,
+  unique: 1
+}
+
+const mockMdLinksStatsValidateError = {
+  total: 3,
+  broken: 1,
   unique: 2
 }
 
 module.exports = {
-  mockMdLinks, mockHref, mockValidate, mockMdLinksValidate, mockStats, mockStatsValidate, mockHtml, mockMdLinksError, mockMdLinksStatsError, mockMdLinksValidateError
+  mockMdLinks, mockHref, mockValidate, mockMdLinksValidate, mockStats, mockStatsValidate, mockHtml, mockMdLinksError, mockMdLinksStatsError, mockMdLinksValidateError,  mockMdLinksStatsValidateError
 }

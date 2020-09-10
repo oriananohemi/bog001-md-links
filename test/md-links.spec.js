@@ -9,10 +9,12 @@ const {
   mockHtml,
   mockMdLinksError,
   mockMdLinksValidateError,
-  mockMdLinksStatsError} = require('./mock/mock');
+  mockMdLinksStatsError,
+  mockMdLinksStatsValidateError} = require('./mock/mock');
 const utils = require('../src/utils');
 const handleFile = require('../src/handleFile');
 const prueba = `${__dirname}/mock/folderMock/prueba.md`;
+
 jest.mock('marked');
 const marked = require('marked');
 
@@ -21,12 +23,12 @@ describe('statsLinks', () => {
     expect(typeof mdLinks.statsLinks).toBe('function');
   });
 
-  it('Si se recibe el parametro stats vamos a retornar un objeto con las key (total, unique)', () => {
+  it('Debe retornar un objeto con el total de enlaces y los enlaces unicos', () => {
     const result = mdLinks.statsLinks(mockMdLinks)
     expect(result).toEqual(mockStats);
   });
 
-  it('Si se recibe los parametros stats y validate vamos a retornar un objeto con las key (total, unique y broke)', () => {
+  it('Debe retornar un objeto con el total de enlaces, la cantidad de enlaces rotos y los enlaces unicos', () => {
     const result = mdLinks.statsLinks(mockMdLinksValidate, {validate: true})
     expect(result).toEqual(mockStatsValidate);
   });
@@ -37,11 +39,12 @@ describe('validateLink', () => {
     expect(typeof mdLinks.validateLink).toBe('function');
   });
 
-  it('Si se recibe el parametro validate retorna una promesa con el codigo de respuesta', () => {
+  it('Debe retornar una promesa que cuando se resuelva contenga los codigos de respuesta de los enlaces', () => {
     const result = mdLinks.validateLink(mockHref)
     expect(result).resolves.toEqual(mockValidate);
   });
-  it('Si se recibe el parametro validate y el archivo es un enlace interno la promesa retornara el string Es un enlace interno', () => {
+
+  it('Debe retornar una promesa que cuando se resuelva contenga el string Es un enlace interno', () => {
     const fileInt = '#1-resumen-del-proyecto';
     const value = 'Es un enlace interno';
     const result = mdLinks.validateLink(fileInt);
@@ -53,7 +56,7 @@ describe('getLinks', () => {
   it('Debe ser una funcion', () => {
     expect(typeof mdLinks.getLinks).toBe('function');
   });
-  it('Debe retornar una promesa con un arreglo de objetos', () => {
+  it('Debe retornar una promesa que cuando se resuelva contenga un arreglo de objeto con el href, el file y el texto', () => {
     const options = {
       validate: false,
       stats: false
@@ -62,7 +65,7 @@ describe('getLinks', () => {
     const result = mdLinks.getLinks('', options, '/file/path/to-file.md');
     expect(result).resolves.toEqual(mockMdLinksError);
   });
-  it('Debe retornar un objeto con las key unique y total', () => {
+  it('Debe retornar una promesa que cuando se resuelva contenga un objeto con la cantidad de enlaces y la cantidad de enlaces unicos', () => {
     const options = {
       validate: false,
       stats: true
@@ -71,7 +74,7 @@ describe('getLinks', () => {
     const result = mdLinks.getLinks('', options, '/file/path/to-file.md');
     expect(result).resolves.toEqual(mockMdLinksStatsError);
   });
-  it('Debe retornar una promesa con un arreglo de objetos', () => {
+  it('Debe retornar una promesa que cuando se resuelva contenga un objeto con el href, el file, el texto y el status del enlace', () => {
     const options = {
       validate: true,
       stats: false
@@ -80,16 +83,20 @@ describe('getLinks', () => {
     const result = mdLinks.getLinks('', options, '/file/path/to-file.md');
     expect(result).resolves.toEqual(mockMdLinksValidateError);
   });
+  it('Debe retornar una promesa que cuando se resuelva contenga un objeto con la cantidad de enlaces, la cantidad de enlaces unicos y la cantidad de enlaces rotos', () => {
+    const options = {
+      validate: true,
+      stats: true
+    }
+    marked.mockReturnValue(mockHtml);
+    const result = mdLinks.getLinks('', options, '/file/path/to-file.md');
+    expect(result).resolves.toEqual(mockMdLinksStatsValidateError);
 });
+  });
 
 describe('mdlinks', () => {
   it('Debe ser una funcion', () => {
     expect(typeof mdLinks.  mdLinks).toBe('function');
-  });
-
-  it('Debe retornar una promesa con un arreglo de objetos si no recibe opciones', () => {
-    const result = mdLinks.mdLinks(prueba);
-    expect(result).resolves.toEqual(mockMdLinks)
   });
 
   it('Debe retornar un error si el archivo no es del tipo requerido', () => {
@@ -98,7 +105,7 @@ describe('mdlinks', () => {
 
     const result = mdLinks.mdLinks('string');
 
-    expect(result).rejects.toMatch('error')
+    expect(result).rejects.toMatch('El archivo no es del tipo .md')
   });
   it('Debe ejecutar la funcion read si el archivo es del tipo markdown', () => {
     jest.spyOn(utils, 'buildRoute').mockImplementationOnce(() => '');

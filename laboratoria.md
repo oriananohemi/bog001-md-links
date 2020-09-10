@@ -41,7 +41,7 @@ algunas estadísticas.
 ### Instalar CLI
 
   <kbd>
-      $ npm install -g @oriananohemi/md-links
+      $ npm install -g oriananohemi/md-links
   </kbd>
 
 ### Uso CLI
@@ -126,7 +126,7 @@ algunas estadísticas.
 ### Instalar como Modulo
 
   <kbd>
-      $ npm install @oriananohemi/md-links
+      $ npm install oriananohemi/md-links
   </kbd>
 
 ### Uso del Modulo

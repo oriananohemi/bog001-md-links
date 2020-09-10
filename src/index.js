@@ -25,14 +25,13 @@ const init = (filePath) => {
         }
       }).catch(console.error)
     } else {
-      const files = fs.readdirSync(fileNamePath);
+      const files = fs.readdirSync(filePath);
       const mdFiles = files.filter(file => utils.checkFileType(file, TYPE_FILE_REQUIRED))
       mdFiles.forEach(file => {
         const dirname = path.join(filePath , file);
         mdLinks(dirname, options).then((links) => {
-          console.log(links)
           if(links.length === 0) {
-            console.log('El archivo no contiene enlaces')
+            console.log(`El archivo que ingresaste no contiene enlaces`)
           } else {
             console.log(links)
           }
