@@ -1,6 +1,6 @@
 # MD-links - Laboratoria
 
-Instrucciones
+**Instrucciones**
 
 Libreria que permite extraer todos los enlaces dentro de un archivo de tipo Markdown, identificar cuales son los codigos de respuesta de las consultas, realizar estadisticas: cuantos enlaces estan rotos, cuales son unicos, cuantos hay en total
 
